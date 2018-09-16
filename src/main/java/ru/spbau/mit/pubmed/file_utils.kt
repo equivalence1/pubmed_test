@@ -17,6 +17,11 @@ fun gunzipFile(fPath: String): String {
     val file = File(fPath)
     val outFile = File(fPath.removeSuffix(".gz"))
 
+    // already guzipped, skip
+    if (outFile.exists()) {
+        return outFile.canonicalPath
+    }
+
     val gzis = GZIPInputStream(FileInputStream(file))
     gzis.use {
         val out = FileOutputStream(outFile)
