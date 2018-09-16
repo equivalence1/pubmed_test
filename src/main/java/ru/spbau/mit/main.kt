@@ -1,9 +1,9 @@
 package ru.spbau.mit
 
-import ru.spbau.mit.pubmed.PubmedCvsConstructor
+import ru.spbau.mit.pubmed.PubmedCsvConstructor
 
 fun main(args: Array<String>) {
-    val cvsPath = PubmedCvsConstructor.constructDailyCvs(false, 1)
+    val cvsPath = PubmedCsvConstructor.constructDailyCsv(false, 1)
     System.out.println("Constructed cvs file %s".format(cvsPath))
 }
 

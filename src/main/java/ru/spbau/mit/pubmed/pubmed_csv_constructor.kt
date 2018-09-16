@@ -6,22 +6,22 @@ import org.xml.sax.helpers.DefaultHandler
 import java.io.File
 import javax.xml.parsers.SAXParserFactory
 
-object PubmedCvsConstructor {
+object PubmedCsvConstructor {
 
-    private const val CVS_PATH = "/tmp/pubmed/db.csv"
-    private val cvsFile = File(CVS_PATH)
-    private val log = LogManager.getLogger(PubmedCvsConstructor.javaClass.name)
+    private const val CSV_PATH = "/tmp/pubmed/db.csv"
+    private val csvFile = File(CSV_PATH)
+    private val log = LogManager.getLogger(PubmedCsvConstructor.javaClass.name)
 
-    fun constructDailyCvs(forceRecreate: Boolean, xmlsMaxCnt: Int = 10): String {
+    fun constructDailyCsv(forceRecreate: Boolean, xmlsMaxCnt: Int = 10): String {
         if (forceRecreate) {
             recreateDir()
         }
 
-        if (cvsAlreadyExists()) {
-            return CVS_PATH
+        if (csvAlreadyExists()) {
+            return CSV_PATH
         }
 
-        createBasicCvs()
+        createBasicCsv()
 
         PubmedRetriever.retrieveDailyXMLs(xmlsMaxCnt)
                 .map { fPath ->
@@ -36,34 +36,34 @@ object PubmedCvsConstructor {
                     }
                 }
                 .filter { fPath: String -> fPath != "" }
-                .forEach { fPath: String -> appendCvs(fPath) }
+                .forEach { fPath: String -> appendCsv(fPath) }
 
-        return CVS_PATH
+        return CSV_PATH
     }
 
-    private fun cvsAlreadyExists() = cvsFile.exists() && cvsFile.isFile
+    private fun csvAlreadyExists() = csvFile.exists() && csvFile.isFile
 
     private fun recreateDir() {
-        val dir = cvsFile.parentFile
+        val dir = csvFile.parentFile
         if (dir.exists()) {
             dir.deleteRecursively()
         }
     }
 
-    private fun createBasicCvs() {
-        ensureDirExists(cvsFile.parentFile)
-        ensureFileExists(cvsFile)
+    private fun createBasicCsv() {
+        ensureDirExists(csvFile.parentFile)
+        ensureFileExists(csvFile)
 
         // Task description does not specify the exact format of CSV file to generate.
         // Here I use only some of many pubmed citations fields, since we don't need most of them
         // for this particular task.
-        cvsFile.bufferedWriter().use { out ->
+        csvFile.bufferedWriter().use { out ->
             out.write("Date,Title,Abstract\n")
         }
     }
 
-    private fun appendCvs(fPath: String) {
-        log.info("Appending file %s to cvs %s".format(fPath, CVS_PATH))
+    private fun appendCsv(fPath: String) {
+        log.info("Appending file %s to csv %s".format(fPath, CSV_PATH))
 
         try {
             val xmlFile = File(fPath)
@@ -72,7 +72,7 @@ object PubmedCvsConstructor {
             val articleHandler = ArticleHandler()
             saxParser.parse(xmlFile, articleHandler)
         } catch (e: Exception) {
-            log.error("Failed to append file %s to csv database file %s".format(fPath, CVS_PATH), e)
+            log.error("Failed to append file %s to csv database file %s".format(fPath, CSV_PATH), e)
         }
     }
 
@@ -155,7 +155,7 @@ object PubmedCvsConstructor {
             when (state) {
                 Element.CLOSE_ARTICLE -> {
                     val csvStr = "%s-%s-%s,\"%s\",\"%s\"".format(pubYear, pubMonth, pubDay, title, abstract)
-                    cvsFile.appendText("%s\n".format(csvStr))
+                    csvFile.appendText("%s\n".format(csvStr))
                     pubYear = ""
                     pubMonth = ""
                     pubDay = ""

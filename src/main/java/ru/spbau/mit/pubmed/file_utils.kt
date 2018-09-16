@@ -41,29 +41,6 @@ fun gunzipFile(fPath: String): String {
     return outFile.canonicalPath
 }
 
-///**
-// * Converts a single .xml file into .cvs file. If operation fails,
-// * it just silently logs an error and returns false.
-// *
-// * @param file
-// *        .xml file to convert into .csv file
-// * @return
-// *        true -- if file was successfully converted from .xml to .cvs format
-// *        false -- otherwise
-// */
-//fun xml2csvFile(file: File): Boolean {
-//    val factory = DocumentBuilderFactory.newInstance()
-//    val builder = factory.newDocumentBuilder()
-//    val document = builder.parse(xmlSource)
-//
-//    val stylesource = StreamSource(stylesheet)
-//    val transformer = TransformerFactory.newInstance()
-//            .newTransformer(stylesource)
-//    val source = DOMSource(document)
-//    val outputTarget = StreamResult(File("/tmp/x.csv"))
-//    transformer.transform(source, outputTarget)
-//}
-
 fun ensureFileExists(file: File) {
     if (file.exists()) {
         return
