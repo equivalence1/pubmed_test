@@ -65,6 +65,11 @@ object PubmedRetriever {
                     break
                 }
 
+                if (resFiles.contains(destPath + "/" + xml.name)) {
+                    log.info("file %s is already downloaded. Skipping.".format(xml.name))
+                    continue
+                }
+
                 log.info("trying to retrieve file %s".format(xml.name))
 
                 val destFile = File(destPath, xml.name)
