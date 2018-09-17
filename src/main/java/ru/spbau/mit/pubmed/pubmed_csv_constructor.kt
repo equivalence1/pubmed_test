@@ -88,8 +88,6 @@ object PubmedCsvConstructor {
 
     private class ArticleHandler: DefaultHandler() {
         private var pubYear = ""
-        private var pubMonth = ""
-        private var pubDay = ""
         private var title = ""
         private var abstract = ""
 
@@ -97,8 +95,6 @@ object PubmedCsvConstructor {
             NONE,
             DATE_COMPLETED,
             DATE_COMPLETED_YEAR,
-            DATE_COMPLETED_MONTH,
-            DATE_COMPLETED_DAY,
             TITLE,
             ABSTRACT,
             CLOSE_ARTICLE
@@ -116,16 +112,6 @@ object PubmedCsvConstructor {
                         state = Element.DATE_COMPLETED_YEAR
                     }
                 }
-                "Month" -> {
-                    if (state == Element.DATE_COMPLETED) {
-                        state = Element.DATE_COMPLETED_MONTH
-                    }
-                }
-                "Day" -> {
-                    if (state == Element.DATE_COMPLETED) {
-                        state = Element.DATE_COMPLETED_DAY
-                    }
-                }
             }
         }
 
@@ -133,16 +119,6 @@ object PubmedCsvConstructor {
             when (qName) {
                 "Year" -> {
                     if (state == Element.DATE_COMPLETED_YEAR) {
-                        state = Element.DATE_COMPLETED
-                    }
-                }
-                "Month" -> {
-                    if (state == Element.DATE_COMPLETED_MONTH) {
-                        state = Element.DATE_COMPLETED
-                    }
-                }
-                "Day" -> {
-                    if (state == Element.DATE_COMPLETED_DAY) {
                         state = Element.DATE_COMPLETED
                     }
                 }
@@ -157,11 +133,9 @@ object PubmedCsvConstructor {
         override fun characters(ch: CharArray?, start: Int, length: Int) {
             when (state) {
                 Element.CLOSE_ARTICLE -> {
-                    val csvStr = "%s-%s-%s,\"%s\",\"%s\"".format(pubYear, pubMonth, pubDay, title, abstract)
+                    val csvStr = "%s,\"%s\",\"%s\"".format(pubYear, title, abstract)
                     csvFile.appendText("%s\n".format(csvStr))
                     pubYear = ""
-                    pubMonth = ""
-                    pubDay = ""
                     title = ""
                     abstract = ""
                 }
@@ -173,12 +147,6 @@ object PubmedCsvConstructor {
                 }
                 Element.DATE_COMPLETED_YEAR -> {
                     ch?.let {it -> pubYear = String(it, start, length)}
-                }
-                Element.DATE_COMPLETED_MONTH -> {
-                    ch?.let {it -> pubMonth = String(it, start, length)}
-                }
-                Element.DATE_COMPLETED_DAY -> {
-                    ch?.let {it -> pubDay = String(it, start, length)}
                 }
                 else -> {}
             }
