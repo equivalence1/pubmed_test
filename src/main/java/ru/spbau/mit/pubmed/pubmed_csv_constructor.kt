@@ -18,6 +18,7 @@ object PubmedCsvConstructor {
         }
 
         if (csvAlreadyExists()) {
+            log.info("%s file already exists. Aborting.".format(CSV_PATH))
             return CSV_PATH
         }
 
@@ -37,6 +38,8 @@ object PubmedCsvConstructor {
                 }
                 .filter { fPath: String -> fPath != "" }
                 .forEach { fPath: String -> appendCsv(fPath) }
+
+        log.info("Successfully created file %s".format(CSV_PATH))
 
         return CSV_PATH
     }

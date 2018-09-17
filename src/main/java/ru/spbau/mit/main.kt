@@ -1,9 +1,16 @@
 package ru.spbau.mit
 
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.context.annotation.Bean
 import ru.spbau.mit.pubmed.PubmedCsvConstructor
 
+@SpringBootApplication
+class Application
+
 fun main(args: Array<String>) {
-    val cvsPath = PubmedCsvConstructor.constructDailyCsv(false, 2)
-    System.out.println("Constructed cvs file %s".format(cvsPath))
+    SpringApplication.run(Application::class.java, *args)
 }
 
+@Bean
+fun csvPath() = PubmedCsvConstructor.constructDailyCsv(false, 1)
