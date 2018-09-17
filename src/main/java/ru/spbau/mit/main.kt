@@ -9,7 +9,7 @@ import ru.spbau.mit.pubmed.PubmedCsvConstructor
 class Application {
 
     @Bean(name = ["csvPath"])
-    fun csvPath(): String = PubmedCsvConstructor.constructDailyCsv(false, 1)
+    fun csvPath(): String = PubmedCsvConstructor.constructDailyCsv(false, 10)
 
 }
 

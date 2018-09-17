@@ -140,13 +140,21 @@ object PubmedCsvConstructor {
                     abstract = ""
                 }
                 Element.TITLE -> {
-                    ch?.let {it -> title = String(it, start, length)}
+                    ch?.let { it ->
+                        title = String(it, start, length)
+                        val re = Regex("[\\t\\n\\r\"]")
+                        title = re.replace(title, "")
+                    }
                 }
                 Element.ABSTRACT -> {
-                    ch?.let {it -> abstract = String(it, start, length)}
+                    ch?.let { it ->
+                        abstract = String(it, start, length)
+                        val re = Regex("[\\t\\n\\r\"]")
+                        abstract = re.replace(abstract, "")
+                    }
                 }
                 Element.DATE_COMPLETED_YEAR -> {
-                    ch?.let {it -> pubYear = String(it, start, length)}
+                    ch?.let { it -> pubYear = String(it, start, length) }
                 }
                 else -> {}
             }
