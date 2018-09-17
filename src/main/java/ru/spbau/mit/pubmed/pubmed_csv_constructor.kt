@@ -61,7 +61,7 @@ object PubmedCsvConstructor {
         // Here I use only some of many pubmed citations fields, since we don't need most of them
         // for this particular task.
         csvFile.bufferedWriter().use { out ->
-            out.write("Date,Title,Abstract\n")
+            out.write("Year,Title,Abstract\n")
         }
     }
 
